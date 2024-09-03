@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
-
-# Display listening TCP and UDP ports with their corresponding PID and program name
-echo "Active Internet connections (only servers)"
-echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
-
-# List TCP sockets in listening state
-ss -tuln | awk 'NR > 1 { print $1, $2, $3, $4, $5, $6 }' | grep LISTEN | while read proto recvq sendq local foreign state pid; do
-    program=$(ss -tp | grep "$local" | awk -F, '{print $2}' | awk '{print $2}')
-    echo "$proto $recvq $sendq $local $foreign $state $pid/$program"
-done
-
-# List UDP sockets in listening state
-ss -uln | awk 'NR > 1 { print $1, $2, $3, $4, $5 }' | while read proto recvq sendq local foreign; do
-    program=$(ss -up | grep "$local" | awk -F, '{print $2}' | awk '{print $2}')
-    echo "$proto $recvq $sendq $local $foreign $program"
-done
+# display listening ports: 'netstat'
+# show only listening sockets '-l'
+# PID and name of the program to which each socket belong '--program'
+sudo netstat -l --program
